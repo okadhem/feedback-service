@@ -20,6 +20,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 
 import com.talan.byblos.common.utility.security.JwtUtils;
+import com.talan.byblos.enquete.controllers.EnqueteController;
+import com.talan.byblos.enquete.dao.EnqueteDAO;
 import com.talan.byblos.feedback.service.StorageService;
 import com.talan.byblos.feedback.service.impl.FileSystemStorageService;
 import com.talan.byblos.feedback.service.impl.StorageProperties;
@@ -31,9 +33,11 @@ import com.talan.byblos.feedback.service.impl.StorageProperties;
 @EnableScheduling
 @EnableEurekaClient
 @SpringBootApplication
-@EntityScan("com.talan.byblos.common.entities")
+@EntityScan(basePackages = {"com.talan.byblos.common.entities","com.talan.byblos.enquete.entites"})
 @EnableConfigurationProperties(StorageProperties.class)
 @ComponentScan
+@ComponentScan(basePackageClasses = EnqueteController.class)
+@ComponentScan(basePackageClasses = EnqueteDAO.class)
 @EnableAutoConfiguration
 
 public class FeedbackApplication {
