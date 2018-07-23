@@ -9,7 +9,7 @@ import com.talan.byblos.common.dto.AbstractDTO;
 import com.talan.byblos.enquete.entites.QuestionEntity;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property="type", include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = QcmDTO.class, name = "Qcm"),
 
