@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.talan.byblos.common.utility.security.JwtUtils;
 import com.talan.byblos.enquete.controllers.EnqueteController;
-import com.talan.byblos.enquete.dao.EnqueteDAO;
+import com.talan.byblos.enquete.dao.SurveyDAO;
 import com.talan.byblos.feedback.service.StorageService;
 import com.talan.byblos.feedback.service.impl.FileSystemStorageService;
 import com.talan.byblos.feedback.service.impl.StorageProperties;
@@ -37,7 +37,7 @@ import com.talan.byblos.feedback.service.impl.StorageProperties;
 @EnableConfigurationProperties(StorageProperties.class)
 @ComponentScan
 @ComponentScan(basePackageClasses = EnqueteController.class)
-@ComponentScan(basePackageClasses = EnqueteDAO.class)
+@ComponentScan(basePackageClasses = SurveyDAO.class)
 @EnableAutoConfiguration
 
 public class FeedbackApplication {
