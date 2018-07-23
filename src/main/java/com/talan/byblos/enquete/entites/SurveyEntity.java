@@ -19,8 +19,8 @@ import com.talan.byblos.common.entities.SubAbstractEntity;
 
 
 @Entity
-@Table(name = "ref_enquete", schema = ModelConstant.SCHEMA)
-public class EnqueteEntity extends SubAbstractEntity{
+@Table(name = "ref_survey", schema = ModelConstant.SCHEMA)
+public class SurveyEntity extends SubAbstractEntity{
 	    
 		/**
 	 * 
@@ -31,13 +31,12 @@ public class EnqueteEntity extends SubAbstractEntity{
 	
 		@Id
 		@GeneratedValue(strategy=GenerationType.AUTO)
-		@Column(name = "id_enquete")
 	    private long id;
 		
 
-		@Column(name = "nom")
+		
 		private String name;
-		@Column(name = "date_expiration" ) 
+		
 		private Date expirationDate;
 		
 		@OneToMany(cascade = CascadeType.ALL)

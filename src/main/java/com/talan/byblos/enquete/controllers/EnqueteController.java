@@ -1,5 +1,6 @@
 package com.talan.byblos.enquete.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -17,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.talan.byblos.common.utility.exception.ByblosDataAccessException;
 import com.talan.byblos.common.utility.exception.ByblosSecurityException;
-import com.talan.byblos.enquete.dao.EnqueteDAO;
+import com.talan.byblos.enquete.dao.SurveyDAO;
 import com.talan.byblos.enquete.dao.QTextDAO;
 import com.talan.byblos.enquete.dao.QuestionDAO;
-import com.talan.byblos.enquete.dto.EnqueteDTO;
+import com.talan.byblos.enquete.dto.SurveyDTO;
+import com.talan.byblos.enquete.dto.QMultChoicesDTO;
 import com.talan.byblos.enquete.dto.QuestionDTO;
 
 
@@ -34,7 +36,7 @@ public class EnqueteController {
 	@PersistenceContext
 	private EntityManager entityManager;
 	@Autowired
-	EnqueteDAO enqueteDAO;
+	SurveyDAO enqueteDAO;
 	@Autowired
 	QuestionDAO questionDAO;
 	@Autowired
@@ -46,7 +48,7 @@ public class EnqueteController {
 	
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
 	@GetMapping("enquetes")
-	public List<EnqueteDTO> enquetes() throws ByblosDataAccessException, ByblosSecurityException{
+	public List<SurveyDTO> enquetes() throws ByblosDataAccessException, ByblosSecurityException{
 		
 		
 		return enqueteDAO.findAll();
@@ -57,7 +59,7 @@ public class EnqueteController {
 	
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
 	@PostMapping("enquetes")
-	public EnqueteDTO enquetes(@RequestBody EnqueteDTO enquete) throws ByblosDataAccessException{
+	public SurveyDTO enquetes(@RequestBody SurveyDTO enquete) throws ByblosDataAccessException{
 		
 		return enqueteDAO.merge(enquete);
 		

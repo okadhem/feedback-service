@@ -8,7 +8,7 @@ import java.util.List;
 import com.talan.byblos.common.dto.AbstractDTO;
 
 
-public class EnqueteDTO extends AbstractDTO {
+public class SurveyDTO extends AbstractDTO {
 	
     /**
 	 * 

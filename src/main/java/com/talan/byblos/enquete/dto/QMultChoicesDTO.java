@@ -2,10 +2,10 @@ package com.talan.byblos.enquete.dto;
 
 import java.util.List;
 
-import com.talan.byblos.enquete.entites.QChoixMultiEntity;
+import com.talan.byblos.enquete.entites.QMultChoicesEntity;
 
 
-public class QcmDTO extends QuestionDTO {
+public class QMultChoicesDTO extends QuestionDTO {
 	/**
 	 * 
 	 */
@@ -18,8 +18,8 @@ public class QcmDTO extends QuestionDTO {
 	
 	
 	@Override
-	public QChoixMultiEntity toEntity() {
-		QChoixMultiEntity entity = new QChoixMultiEntity();
+	public QMultChoicesEntity toEntity() {
+		QMultChoicesEntity entity = new QMultChoicesEntity();
 		entity.setRequired(required);
 		entity.setId(id);
 		entity.setLabel(label);

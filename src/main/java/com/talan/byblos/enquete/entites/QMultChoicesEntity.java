@@ -6,13 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 
-import com.talan.byblos.enquete.dto.QcmDTO;
+import com.talan.byblos.enquete.dto.QMultChoicesDTO;
 
 
 
 
 @Entity
-public class QChoixMultiEntity extends QuestionEntity {
+public class QMultChoicesEntity extends QuestionEntity {
 	
 	
 	
@@ -22,20 +22,20 @@ public class QChoixMultiEntity extends QuestionEntity {
 	
 	@ElementCollection
 	@Column(name = "option_label")
-	List<String> choix;
+	List<String> choices;
 
 	
 	@Override
-	public QcmDTO toDTO()
+	public QMultChoicesDTO toDTO()
 	{
-		QcmDTO dto = new QcmDTO();
+		QMultChoicesDTO dto = new QMultChoicesDTO();
 		
 		
 		dto.setId(id);
 		dto.setLabel(label);
 		
 		dto.setRequired(required);
-		dto.setChoices(choix);
+		dto.setChoices(choices);
 		
 		return dto;
 	}
@@ -46,10 +46,10 @@ public class QChoixMultiEntity extends QuestionEntity {
 	// getters and setters
 	
 	public List<String> getChoix() {
-		return choix;
+		return choices;
 	}
 
 	public void setChoix(List<String> choix) {
-		this.choix = choix;
+		this.choices = choix;
 	}	
 }

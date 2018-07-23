@@ -8,21 +8,21 @@ import org.springframework.stereotype.Component;
 import com.talan.byblos.common.dao.impl.generic.GenericDAOImpl;
 import com.talan.byblos.common.utility.exception.ByblosDataAccessException;
 import com.talan.byblos.common.utility.exception.ByblosSecurityException;
-import com.talan.byblos.enquete.dao.EnqueteDAO;
-import com.talan.byblos.enquete.dto.EnqueteDTO;
+import com.talan.byblos.enquete.dao.SurveyDAO;
+import com.talan.byblos.enquete.dto.SurveyDTO;
 import com.talan.byblos.enquete.dto.QuestionDTO;
-import com.talan.byblos.enquete.entites.EnqueteEntity;
+import com.talan.byblos.enquete.entites.SurveyEntity;
 import com.talan.byblos.enquete.entites.QuestionEntity;
 
 
 @Component
 
-public class EnqueteDAOImpl extends GenericDAOImpl<EnqueteDTO, EnqueteEntity> implements EnqueteDAO{
+public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> implements SurveyDAO{
 
 	@Override
-	public List<EnqueteDTO> findAll() throws ByblosDataAccessException, ByblosSecurityException{
-		String query = "select e from EnqueteEntity e";
-		List<EnqueteEntity> queryResult = getEntityManager().createQuery(query).getResultList();
+	public List<SurveyDTO> findAll() throws ByblosDataAccessException, ByblosSecurityException{
+		String query = "select e from SurveyEntity e";
+		List<SurveyEntity> queryResult = getEntityManager().createQuery(query).getResultList();
 		
 		
 		return queryResult.stream().map(this::getDTOFromEntity).collect(Collectors.toList());
@@ -31,11 +31,11 @@ public class EnqueteDAOImpl extends GenericDAOImpl<EnqueteDTO, EnqueteEntity> im
 	}
 	
 	@Override
-	public EnqueteEntity getEntityFromDTO(EnqueteDTO dto) {
+	public SurveyEntity getEntityFromDTO(SurveyDTO dto) {
 	
 		QuestionDAOImpl qDao = new QuestionDAOImpl(); 
 		List<QuestionEntity> entityQuestions = dto.getQuestions().stream().map(qDao::getEntityFromDTO).collect(Collectors.toList());
-		EnqueteEntity e = new EnqueteEntity();
+		SurveyEntity e = new SurveyEntity();
 		e.setQuestions(entityQuestions);
 		e.setExpirationDate(dto.getExpirationDate());
 		e.setName(dto.getName());
@@ -49,10 +49,10 @@ public class EnqueteDAOImpl extends GenericDAOImpl<EnqueteDTO, EnqueteEntity> im
 	
 	
 	@Override
-	public EnqueteDTO getDTOFromEntity(EnqueteEntity entity) {
+	public SurveyDTO getDTOFromEntity(SurveyEntity entity) {
 		
 		QuestionDAOImpl qDao = new QuestionDAOImpl(); 
-		EnqueteDTO dto = new EnqueteDTO();
+		SurveyDTO dto = new SurveyDTO();
 		List<QuestionDTO> DTOQuestions = entity.getQuestions().stream().map(qDao::getDTOFromEntity).collect(Collectors.toList());
 		dto.setQuestions(DTOQuestions);
 		dto.setExpirationDate(entity.getExpirationDate());

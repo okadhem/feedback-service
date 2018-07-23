@@ -11,7 +11,7 @@ import com.talan.byblos.enquete.entites.QuestionEntity;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property="type", include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = QcmDTO.class, name = "Qcm"),
+    @JsonSubTypes.Type(value = QMultChoicesDTO.class, name = "Qcm"),
 
     @JsonSubTypes.Type(value = QTextDTO.class, name = "QTextEntity") }
 )
