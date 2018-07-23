@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 import com.talan.byblos.common.dto.AbstractDTO;
+import com.talan.byblos.common.entities.EmployeeEntity;
 
 
 public class SurveyDTO extends AbstractDTO {
@@ -17,8 +17,13 @@ public class SurveyDTO extends AbstractDTO {
 
 	private long id; 
 	
-	private String name;
+	private String title;
+	
 	private Date expirationDate;
+	
+	private String description;
+	
+	private List<EmployeeEntity> visibility;
 	
 	
 	private List<QuestionDTO> questions = new ArrayList<>();
@@ -29,14 +34,14 @@ public class SurveyDTO extends AbstractDTO {
 		questions.add(q);
 		
 	}
-	
+
 	// getters and setters
 	
 	public String getName() {
-		return name;
+		return title;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.title = name;
 	}
 	public Date getExpirationDate() {
 		return expirationDate;
@@ -55,6 +60,30 @@ public class SurveyDTO extends AbstractDTO {
 	}
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<EmployeeEntity> getVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(List<EmployeeEntity> visibility) {
+		this.visibility = visibility;
 	}
 	
 

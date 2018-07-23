@@ -21,7 +21,7 @@ public class QMultChoicesEntity extends QuestionEntity {
 
 	
 	@ElementCollection
-	@Column(name = "option_label")
+	@Column(name = "choices_label")
 	List<String> choices;
 
 	

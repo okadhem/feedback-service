@@ -5,15 +5,17 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.talan.byblos.common.constants.ModelConstant;
+import com.talan.byblos.common.entities.EmployeeEntity;
 import com.talan.byblos.common.entities.SubAbstractEntity;
 
 
@@ -35,13 +37,20 @@ public class SurveyEntity extends SubAbstractEntity{
 		
 
 		
-		private String name;
+		private String title;
+		
+		private String description;
+		
+		@ManyToMany
+		private List<EmployeeEntity> visibility;
 		
 		private Date expirationDate;
 		
-		@OneToMany(cascade = CascadeType.ALL)
+		@ManyToOne
+		private EmployeeEntity owner;
 		
-		private List<QuestionEntity> questionEntities = new ArrayList<>();
+		@OneToMany(cascade = CascadeType.ALL)
+		private List<QuestionEntity> questions = new ArrayList<>();
 		
 		
 		
@@ -49,7 +58,7 @@ public class SurveyEntity extends SubAbstractEntity{
 		
 		public void addQuestion(QuestionEntity q)
 		{
-			questionEntities.add(q);
+			questions.add(q);
 			
 		}
 		
@@ -57,10 +66,10 @@ public class SurveyEntity extends SubAbstractEntity{
 		// getters and setters
 		
 		public String getName() {
-			return name;
+			return title;
 		}
 		public void setName(String name) {
-			this.name = name;
+			this.title = name;
 		}
 		public Date getExpirationDate() {
 			return expirationDate;
@@ -69,16 +78,66 @@ public class SurveyEntity extends SubAbstractEntity{
 			this.expirationDate = expirationDate;
 		}
 		public List<QuestionEntity> getQuestions() {
-			return questionEntities;
+			return questions;
 		}
 		public void setQuestions(List<QuestionEntity> questionEntities) {
-			this.questionEntities = questionEntities;
+			this.questions = questionEntities;
 		}
 		public long getId() {
 			return id;
 		}
 		public void setId(long id) {
 			this.id = id;
+		}
+
+
+		public String getTitle() {
+			return title;
+		}
+
+
+		public void setTitle(String title) {
+			this.title = title;
+		}
+
+
+		public String getDescription() {
+			return description;
+		}
+
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+
+		public List<EmployeeEntity> getVisibility() {
+			return visibility;
+		}
+
+
+		public void setVisibility(List<EmployeeEntity> visibility) {
+			this.visibility = visibility;
+		}
+
+
+		public EmployeeEntity getOwner() {
+			return owner;
+		}
+
+
+		public void setOwner(EmployeeEntity owner) {
+			this.owner = owner;
+		}
+
+
+		public List<QuestionEntity> getQuestionEntities() {
+			return questions;
+		}
+
+
+		public void setQuestionEntities(List<QuestionEntity> questionEntities) {
+			this.questions = questionEntities;
 		}
 		
 }

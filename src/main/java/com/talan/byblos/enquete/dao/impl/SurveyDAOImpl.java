@@ -40,6 +40,8 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		e.setExpirationDate(dto.getExpirationDate());
 		e.setName(dto.getName());
 		e.setId(dto.getId());
+		e.setDescription(dto.getDescription());
+		e.setVisibility(dto.getVisibility());
 		return e;
 	
 	
