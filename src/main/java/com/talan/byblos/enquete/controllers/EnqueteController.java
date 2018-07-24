@@ -1,6 +1,5 @@
 package com.talan.byblos.enquete.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -21,14 +20,16 @@ import com.talan.byblos.common.utility.exception.ByblosSecurityException;
 import com.talan.byblos.enquete.dao.SurveyDAO;
 import com.talan.byblos.enquete.dao.QTextDAO;
 import com.talan.byblos.enquete.dao.QuestionDAO;
+import com.talan.byblos.enquete.dao.ResponseDAO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
-import com.talan.byblos.enquete.dto.QMultChoicesDTO;
 import com.talan.byblos.enquete.dto.QuestionDTO;
+import com.talan.byblos.enquete.dto.ResponseDTO;
 
 
 @RestController
 @RequestMapping("api")
 @CrossOrigin("*")
+
 
 public class EnqueteController {
 	
@@ -41,6 +42,11 @@ public class EnqueteController {
 	QuestionDAO questionDAO;
 	@Autowired
 	QTextDAO qTextDAO;
+	
+	@Autowired
+	ResponseDAO responseDAO;
+
+	
 	
 	
 	
@@ -87,6 +93,26 @@ public class EnqueteController {
 		
 		
 		return questionDAO.findAll();
+		
+	}
+	
+	
+	@Transactional(noRollbackFor = Exception.class)
+	@PostMapping("responses")
+	public ResponseDTO responses(@RequestBody ResponseDTO response) throws ByblosDataAccessException{
+			
+	
+		return responseDAO.merge(response);
+		
+	}
+	
+	
+	@Transactional(noRollbackFor = Exception.class)
+	@GetMapping("responses")
+	public List<ResponseDTO> responses() throws ByblosDataAccessException, ByblosSecurityException{
+			
+	
+		return responseDAO.findAll();
 		
 	}
 	
