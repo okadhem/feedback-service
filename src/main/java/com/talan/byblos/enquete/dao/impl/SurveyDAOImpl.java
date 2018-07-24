@@ -35,6 +35,15 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		
 	}
 	
+	@Override
+	public SurveyDTO findById(long id) {
+		String query = "select e from SurveyEntity e where e.id ="+ id;
+		SurveyEntity surveyEntity = (SurveyEntity) getEntityManager().createQuery(query).getSingleResult();
+		
+		return getDTOFromEntity(surveyEntity);
+		
+	}
+	
 	
 	@Override
 	public SurveyEntity getEntityFromDTO(SurveyDTO dto) {
