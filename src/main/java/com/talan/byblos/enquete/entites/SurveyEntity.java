@@ -65,12 +65,7 @@ public class SurveyEntity extends SubAbstractEntity{
 		
 		// getters and setters
 		
-		public String getName() {
-			return title;
-		}
-		public void setName(String name) {
-			this.title = name;
-		}
+		
 		public Date getExpirationDate() {
 			return expirationDate;
 		}

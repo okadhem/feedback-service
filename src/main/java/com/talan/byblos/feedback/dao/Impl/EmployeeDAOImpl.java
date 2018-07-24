@@ -15,14 +15,20 @@ public class EmployeeDAOImpl extends GenericDAOImpl<EmployeeDTO, EmployeeEntity>
 
 	@Override
 	public EmployeeEntity getEntityFromDTO(EmployeeDTO dto) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		EmployeeEntity entity = new EmployeeEntity();
+		entity.setId(dto.getId());
+		entity.setFirstName(dto.getFirstName());
+		entity.setLastName(entity.getLastName());
+		return entity;
+		}
 
 	@Override
 	public EmployeeDTO getDTOFromEntity(EmployeeEntity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		EmployeeDTO dto = new EmployeeDTO();
+		dto.setId(entity.getId());
+		dto.setFirstName(entity.getFirstName());
+		dto.setLastName(entity.getLastName());
+		return dto;
 	}
 
 }

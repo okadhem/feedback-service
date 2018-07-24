@@ -1,6 +1,5 @@
 package com.talan.byblos.enquete.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -22,13 +21,13 @@ import com.talan.byblos.enquete.dao.SurveyDAO;
 import com.talan.byblos.enquete.dao.QTextDAO;
 import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
-import com.talan.byblos.enquete.dto.QMultChoicesDTO;
 import com.talan.byblos.enquete.dto.QuestionDTO;
 
 
 @RestController
 @RequestMapping("api")
 @CrossOrigin("*")
+
 
 public class EnqueteController {
 	
@@ -41,6 +40,7 @@ public class EnqueteController {
 	QuestionDAO questionDAO;
 	@Autowired
 	QTextDAO qTextDAO;
+
 	
 	
 	

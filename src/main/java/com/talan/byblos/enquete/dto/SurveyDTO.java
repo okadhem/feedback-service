@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.talan.byblos.common.dto.AbstractDTO;
-import com.talan.byblos.common.entities.EmployeeEntity;
+import com.talan.byblos.common.dto.PersonneDTO;
 
 
 public class SurveyDTO extends AbstractDTO {
@@ -23,7 +23,9 @@ public class SurveyDTO extends AbstractDTO {
 	
 	private String description;
 	
-	private List<EmployeeEntity> visibility;
+	private List<PersonneDTO> visibility;
+	
+	private PersonneDTO owner;
 	
 	
 	private List<QuestionDTO> questions = new ArrayList<>();
@@ -37,12 +39,7 @@ public class SurveyDTO extends AbstractDTO {
 
 	// getters and setters
 	
-	public String getName() {
-		return title;
-	}
-	public void setName(String name) {
-		this.title = name;
-	}
+	
 	public Date getExpirationDate() {
 		return expirationDate;
 	}
@@ -78,12 +75,20 @@ public class SurveyDTO extends AbstractDTO {
 		this.description = description;
 	}
 
-	public List<EmployeeEntity> getVisibility() {
+	public List<PersonneDTO> getVisibility() {
 		return visibility;
 	}
 
-	public void setVisibility(List<EmployeeEntity> visibility) {
+	public void setVisibility(List<PersonneDTO> visibility) {
 		this.visibility = visibility;
+	}
+
+	public PersonneDTO getOwner() {
+		return owner;
+	}
+
+	public void setOwner(PersonneDTO owner) {
+		this.owner = owner;
 	}
 	
 
