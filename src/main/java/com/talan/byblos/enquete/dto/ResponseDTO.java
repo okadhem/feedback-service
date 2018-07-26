@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.talan.byblos.common.dto.AbstractDTO;
 import com.talan.byblos.enquete.entites.QuestionEntity;
 import com.talan.byblos.enquete.entites.ResponseEntity;
+
+
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property="type", include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
@@ -13,6 +16,9 @@ import com.talan.byblos.enquete.entites.ResponseEntity;
 
     @JsonSubTypes.Type(value = ResponseSingleValueDTO.class, name = "ResponseSingleValue") }
 )
+
+
+
 public class ResponseDTO extends AbstractDTO {
 	
 	protected long questionId;

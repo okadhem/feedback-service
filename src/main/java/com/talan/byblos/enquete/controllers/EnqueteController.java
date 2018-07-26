@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.talan.byblos.common.utility.exception.ByblosDataAccessException;
 import com.talan.byblos.common.utility.exception.ByblosSecurityException;
 import com.talan.byblos.enquete.dao.SurveyDAO;
+import com.talan.byblos.enquete.dao.SurveyResponseDAO;
 import com.talan.byblos.enquete.dao.QTextDAO;
 import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dao.ResponseDAO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
+import com.talan.byblos.enquete.dto.SurveyResponseDTO;
 import com.talan.byblos.enquete.dto.QuestionDTO;
 import com.talan.byblos.enquete.dto.ResponseDTO;
 
@@ -46,6 +48,8 @@ public class EnqueteController {
 	@Autowired
 	ResponseDAO responseDAO;
 
+	@Autowired
+	SurveyResponseDAO surveyResponseDAO;
 	
 	
 	
@@ -115,6 +119,17 @@ public class EnqueteController {
 		return responseDAO.findAll();
 		
 	}
+	
+	@Transactional(noRollbackFor = Exception.class)
+	@PostMapping("survey-responses")
+	public SurveyResponseDTO surveyResponses(@RequestBody SurveyResponseDTO response) throws ByblosDataAccessException{
+			
+	
+		return surveyResponseDAO.merge(response);
+		
+	}
+	
+	
 	
 
 
