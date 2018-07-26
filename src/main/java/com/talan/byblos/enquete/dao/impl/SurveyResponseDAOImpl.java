@@ -2,6 +2,10 @@ package com.talan.byblos.enquete.dao.impl;
 
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.springframework.stereotype.Component;
 
 import com.talan.byblos.common.dao.impl.generic.GenericDAOImpl;
@@ -18,6 +22,10 @@ import com.talan.byblos.enquete.entites.SurveyResponseEntity;
 
 public class SurveyResponseDAOImpl extends GenericDAOImpl<SurveyResponseDTO, SurveyResponseEntity> implements SurveyResponseDAO{
 
+	@PersistenceContext
+	EntityManager em;
+	
+	
 	@Override
 	public SurveyResponseEntity getEntityFromDTO(SurveyResponseDTO dto) {
 		SurveyResponseEntity entity = new SurveyResponseEntity();
@@ -41,6 +49,15 @@ public class SurveyResponseDAOImpl extends GenericDAOImpl<SurveyResponseDTO, Sur
 		
 		// we still need to handel owner (maybe)
 		return dto;
+	}
+	
+	@Override
+	public SurveyResponseDTO findById(long id) {
+		TypedQuery<SurveyResponseEntity> query = 
+				em.createQuery("select r from SurveyResponseEntity r where r.id=" + id, SurveyResponseEntity.class);
+		
+		return getDTOFromEntity(query.getSingleResult());
+		
 	}
 
 }

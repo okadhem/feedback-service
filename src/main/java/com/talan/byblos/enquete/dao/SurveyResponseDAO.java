@@ -10,5 +10,6 @@ import com.talan.byblos.enquete.entites.SurveyResponseEntity;
 
 @Component
 public interface SurveyResponseDAO extends GenericDAO<SurveyResponseDTO, SurveyResponseEntity>{
-
+		
+	public SurveyResponseDTO findById(long id);
 }

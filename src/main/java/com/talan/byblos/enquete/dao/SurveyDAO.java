@@ -6,6 +6,6 @@ import com.talan.byblos.enquete.entites.SurveyEntity;
 
 
 public interface SurveyDAO extends GenericDAO<SurveyDTO, SurveyEntity> {
-
+	public SurveyDTO findById(long id);
 
 }

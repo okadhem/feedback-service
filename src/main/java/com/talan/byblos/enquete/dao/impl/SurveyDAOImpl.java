@@ -3,6 +3,10 @@ package com.talan.byblos.enquete.dao.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.springframework.stereotype.Component;
 
 import com.talan.byblos.common.dao.impl.generic.GenericDAOImpl;
@@ -12,6 +16,7 @@ import com.talan.byblos.enquete.dao.SurveyDAO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
 import com.talan.byblos.enquete.dto.QuestionDTO;
 import com.talan.byblos.enquete.entites.SurveyEntity;
+import com.talan.byblos.enquete.entites.SurveyResponseEntity;
 import com.talan.byblos.enquete.entites.QuestionEntity;
 
 
@@ -19,6 +24,11 @@ import com.talan.byblos.enquete.entites.QuestionEntity;
 
 public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> implements SurveyDAO{
 
+	
+	@PersistenceContext
+	EntityManager em;
+	
+	
 	@Override
 	public List<SurveyDTO> findAll() throws ByblosDataAccessException, ByblosSecurityException{
 		String query = "select e from SurveyEntity e";
@@ -67,4 +77,13 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		
 	}
 
+	
+	
+	public SurveyDTO findById(long id) {
+		TypedQuery<SurveyEntity> query = 
+				em.createQuery("select s from SurveyEntity s where s.id=" + id, SurveyEntity.class);
+		
+		return getDTOFromEntity(query.getSingleResult());
+		
+	}
 }
