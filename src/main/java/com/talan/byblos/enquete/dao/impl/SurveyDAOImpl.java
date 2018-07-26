@@ -85,7 +85,8 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		dto.setExpirationDate(entity.getExpirationDate());
 		dto.setTitle(entity.getTitle());
 		dto.setId(entity.getId());
-
+		dto.setDescription(entity.getDescription());
+		
 		List<PersonneDTO> visibility = entity.getVisibility().stream().map(personEntity -> {
 			PersonneDTO personDTO = new PersonneDTO();
 			personDTO.setId(personEntity.getId());
