@@ -8,13 +8,12 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.QueryParam;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,10 +33,7 @@ import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dao.ResponseDAO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
 import com.talan.byblos.enquete.dto.SurveyResponseDTO;
-import com.talan.byblos.enquete.entites.SurveyResponseEntity;
 import com.talan.byblos.feedback.utility.mapping.PersonneUtility;
-import com.talan.byblos.enquete.dto.QuestionDTO;
-import com.talan.byblos.enquete.dto.ResponseDTO;
 
 
 @RestController
@@ -69,7 +65,7 @@ public class EnqueteController {
 	
 	
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
-	@GetMapping("enquetes/{id}")
+	@GetMapping("surveys/{id}")
 	public SurveyDTO enqueteById(
 			@PathVariable("id") long id,
 			@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException, ByblosSecurityException{
@@ -91,8 +87,11 @@ public class EnqueteController {
 	
 	}
 	
+	
+	
+	
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
-	@GetMapping("enquetes")
+	@GetMapping("surveys")
 	public List<SurveyDTO> enquetes(@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException, ByblosSecurityException{
 		
 		PersonneDTO employee = userIdToEmployee(userId);
@@ -108,9 +107,11 @@ public class EnqueteController {
 	}
 	
 	
+	
+	
 
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
-	@PostMapping("enquetes") 
+	@PostMapping("surveys") 
 	public SurveyDTO enquetes(
 			@RequestBody SurveyDTO enquete,
 			@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException
@@ -126,58 +127,7 @@ public class EnqueteController {
 	
 	
 	
-	
-	
 		
-	@Transactional(noRollbackFor = Exception.class)
-	@PostMapping("questions")
-	public QuestionDTO questions(@RequestBody QuestionDTO question) throws ByblosDataAccessException{
-			
-	
-				
-		return questionDAO.merge(question);
-		
-	}
-	
-
-	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
-	@GetMapping("questions")
-	public List<QuestionDTO> questions() throws ByblosDataAccessException, ByblosSecurityException{
-		
-		
-		return questionDAO.findAll();
-		
-	}
-	
-	
-	@Transactional(noRollbackFor = Exception.class)
-	@PostMapping("responses")
-	public ResponseDTO responses(@RequestBody ResponseDTO response) throws ByblosDataAccessException{
-			
-	
-		return responseDAO.merge(response);
-		
-	}
-	
-	
-	@Transactional(noRollbackFor = Exception.class)
-	@GetMapping("responses")
-	public List<ResponseDTO> responses() throws ByblosDataAccessException, ByblosSecurityException{
-			
-	
-		return responseDAO.findAll();
-		
-	}
-	
-	@Transactional(noRollbackFor = Exception.class)
-	@PostMapping("survey-responses")
-	public SurveyResponseDTO surveyResponses(@RequestBody SurveyResponseDTO response) throws ByblosDataAccessException{
-			
-	
-		return surveyResponseDAO.merge(response);
-		
-	}
-	
 	@Transactional(noRollbackFor = Exception.class) 
 	@PostMapping("surveys/{id}/responses")
 	public SurveyResponseDTO postSurveyResponse(
@@ -204,6 +154,7 @@ public class EnqueteController {
 		
 		
 		
+		
 		response.setOwner(employee);
 		response.setSurveyId(surveyId);
 		
@@ -213,9 +164,13 @@ public class EnqueteController {
 	}
 	
 	
+	
+	
+	
+	
 	@Transactional(noRollbackFor = Exception.class)
 	@GetMapping("surveys/{id}/responses") 
-	public List<SurveyResponseDTO> getSurveyResponses( //ok
+	public List<SurveyResponseDTO> getSurveyResponses( 
 				@RequestParam(name="connected-user") long userId,
 				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException
 	{
@@ -237,8 +192,13 @@ public class EnqueteController {
 	}
 	
 	
+
 	
-	@Transactional(noRollbackFor = Exception.class) // ok
+	
+	
+	
+	
+	@Transactional(noRollbackFor = Exception.class) 
 	@GetMapping("surveys/{id}/my-response")
 	public SurveyResponseDTO getSurveyUserSingleResponse(
 				@RequestParam(name="connected-user") long userId,
