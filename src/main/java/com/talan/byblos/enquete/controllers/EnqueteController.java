@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,8 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.talan.byblos.common.dto.PersonneDTO;
+import com.talan.byblos.common.entities.EmployeeEntity;
 import com.talan.byblos.common.utility.exception.ByblosDataAccessException;
 import com.talan.byblos.common.utility.exception.ByblosSecurityException;
 import com.talan.byblos.enquete.dao.SurveyDAO;
@@ -25,6 +30,7 @@ import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dao.ResponseDAO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
 import com.talan.byblos.enquete.dto.SurveyResponseDTO;
+import com.talan.byblos.feedback.utility.mapping.PersonneUtility;
 import com.talan.byblos.enquete.dto.QuestionDTO;
 import com.talan.byblos.enquete.dto.ResponseDTO;
 
@@ -137,6 +143,32 @@ public class EnqueteController {
 			
 	
 		return surveyResponseDAO.merge(response);
+		
+	}
+	
+	@Transactional(noRollbackFor = Exception.class)
+	@PostMapping("surveys/{id}/responses")
+	public SurveyResponseDTO postSurveyResponse(
+				@RequestBody SurveyResponseDTO response,
+				@RequestParam(name="connected-user") long userId,
+				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException
+	{
+		PersonneDTO employee = userIdToEmployee(userId);
+		response.setOwner(employee);
+		response.setSurveyId(surveyId);
+		
+	
+		return surveyResponseDAO.merge(response);
+		
+	}
+	
+	private PersonneDTO userIdToEmployee(long id) {
+		
+		TypedQuery<EmployeeEntity> query = entityManager
+				.createQuery("select e from UserEntity u join u.personnel e where u.id =" + id, EmployeeEntity.class);
+		
+		return PersonneUtility.convertEntityToDto(query.getSingleResult());
+		
 		
 	}
 	

@@ -19,7 +19,7 @@ import com.talan.byblos.enquete.dto.SurveyDTO;
 import com.talan.byblos.enquete.dto.QuestionDTO;
 import com.talan.byblos.enquete.entites.SurveyEntity;
 import com.talan.byblos.enquete.entites.SurveyResponseEntity;
-
+import com.talan.byblos.feedback.utility.mapping.PersonneUtility;
 import com.talan.byblos.enquete.entites.QuestionEntity;
 
 
@@ -57,6 +57,7 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		e.setTitle(dto.getTitle());
 		e.setId(dto.getId());
 		e.setDescription(dto.getDescription());
+		e.setOwner(PersonneUtility.convertDtoToEntity(dto.getOwner(), null));
 		
 		
 		List<EmployeeEntity> visibility = dto.getVisibility().stream().map(personDTO -> {
@@ -87,6 +88,7 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		dto.setTitle(entity.getTitle());
 		dto.setId(entity.getId());
 		dto.setDescription(entity.getDescription());
+		dto.setOwner(PersonneUtility.convertEntityToDto(entity.getOwner()));
 		
 		List<PersonneDTO> visibility = entity.getVisibility().stream().map(personEntity -> {
 			PersonneDTO personDTO = new PersonneDTO();

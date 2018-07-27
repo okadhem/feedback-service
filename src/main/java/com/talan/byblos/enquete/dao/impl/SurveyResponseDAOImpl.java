@@ -9,12 +9,14 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Component;
 
 import com.talan.byblos.common.dao.impl.generic.GenericDAOImpl;
+import com.talan.byblos.common.dto.PersonneDTO;
 import com.talan.byblos.enquete.dao.SurveyResponseDAO;
 import com.talan.byblos.enquete.dto.ResponseDTO;
 import com.talan.byblos.enquete.dto.SurveyResponseDTO;
 import com.talan.byblos.enquete.entites.ResponseEntity;
 import com.talan.byblos.enquete.entites.SurveyEntity;
 import com.talan.byblos.enquete.entites.SurveyResponseEntity;
+import com.talan.byblos.feedback.utility.mapping.PersonneUtility;
 
 
 
@@ -34,7 +36,8 @@ public class SurveyResponseDAOImpl extends GenericDAOImpl<SurveyResponseDTO, Sur
 		SurveyEntity survey = new SurveyEntity();
 		survey.setId(dto.getSurveyId());
 		entity.setSurvey(survey);
-		// we still need to handel owner (maybe)
+		entity.setOwner(PersonneUtility.convertDtoToEntity(dto.getOwner(), null));
+		
 		
 		return entity;
 	}
@@ -45,9 +48,9 @@ public class SurveyResponseDAOImpl extends GenericDAOImpl<SurveyResponseDTO, Sur
 		dto.setId(entity.getId());
 		dto.setResponses(entity.getResponses().stream().map(ResponseEntity::toDTO).collect(Collectors.toList()));
 		dto.setSurveyId(entity.getSurvey().getId());
+			
+		dto.setOwner(PersonneUtility.convertEntityToDto(entity.getOwner()));
 		
-		
-		// we still need to handel owner (maybe)
 		return dto;
 	}
 	
