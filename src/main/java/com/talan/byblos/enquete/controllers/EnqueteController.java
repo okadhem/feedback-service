@@ -1,7 +1,9 @@
 package com.talan.byblos.enquete.controllers;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +51,7 @@ public class EnqueteController {
 	@PersistenceContext
 	private EntityManager entityManager;
 	@Autowired
-	SurveyDAO enqueteDAO;
+	SurveyDAO surveyDAO;
 	@Autowired
 	QuestionDAO questionDAO;
 	@Autowired
@@ -67,30 +70,57 @@ public class EnqueteController {
 	
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
 	@GetMapping("enquetes/{id}")
-	public SurveyDTO enqueteById(@PathVariable("id") long id) throws ByblosDataAccessException, ByblosSecurityException{
+	public SurveyDTO enqueteById(
+			@PathVariable("id") long id,
+			@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException, ByblosSecurityException{
+		
+		SurveyDTO survey = surveyDAO.findById(id);
+		
+		PersonneDTO employee = userIdToEmployee(userId);
 		
 		
-		return enqueteDAO.findById(id);
+		if(!isEmployeeAuthorized(survey,employee))
+		{
+			// return an error	
+		}
+		
+		
+		
+		return survey;
 		
 	
 	}
 	
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
 	@GetMapping("enquetes")
-	public List<SurveyDTO> enquetes() throws ByblosDataAccessException, ByblosSecurityException{
+	public List<SurveyDTO> enquetes(@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException, ByblosSecurityException{
 		
+		PersonneDTO employee = userIdToEmployee(userId);
 		
-		return enqueteDAO.findAll();
+		List<SurveyDTO> surveys = surveyDAO.findAll().stream()
+		.filter(s -> s.getExpirationDate().after(new Date()))
+		.filter(s -> isEmployeeAuthorized(s,employee))
+		.collect(Collectors.toList());
+		
+		return surveys;
 		
 	
 	}
 	
 	
+
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
-	@PostMapping("enquetes")
-	public SurveyDTO enquetes(@RequestBody SurveyDTO enquete) throws ByblosDataAccessException{
+	@PostMapping("enquetes") 
+	public SurveyDTO enquetes(
+			@RequestBody SurveyDTO enquete,
+			@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException
+	{
 		
-		return enqueteDAO.merge(enquete);
+		PersonneDTO employee = userIdToEmployee(userId);
+		enquete.setOwner(employee);
+		
+		
+		return surveyDAO.merge(enquete);
 		
 	}
 	
@@ -148,14 +178,32 @@ public class EnqueteController {
 		
 	}
 	
-	@Transactional(noRollbackFor = Exception.class)
+	@Transactional(noRollbackFor = Exception.class) 
 	@PostMapping("surveys/{id}/responses")
 	public SurveyResponseDTO postSurveyResponse(
 				@RequestBody SurveyResponseDTO response,
 				@RequestParam(name="connected-user") long userId,
 				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException
 	{
+		SurveyDTO survey = surveyDAO.findById(surveyId);
 		PersonneDTO employee = userIdToEmployee(userId);
+		
+		
+		
+		if(survey.getExpirationDate().before(new Date())) {
+			// error the survey expired
+		}
+		
+		
+		if(!isEmployeeAuthorized(survey, employee))
+		{
+			// error you can't access this survey
+			
+		}
+		
+		
+		
+		
 		response.setOwner(employee);
 		response.setSurveyId(surveyId);
 		
@@ -166,36 +214,58 @@ public class EnqueteController {
 	
 	
 	@Transactional(noRollbackFor = Exception.class)
-	@GetMapping("surveys/{id}/responses")
-	public List<SurveyResponseDTO> getSurveyResponse(
-				
+	@GetMapping("surveys/{id}/responses") 
+	public List<SurveyResponseDTO> getSurveyResponses( //ok
 				@RequestParam(name="connected-user") long userId,
 				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException
 	{
 		PersonneDTO employee = userIdToEmployee(userId);
 		
+		SurveyDTO survey = surveyDAO.findById(surveyId);
+		if(employee.getId() != survey.getOwner().getId())
+		{
+			// error you are not the owner of this survey
+		}
 		
-		return surveyResponseDAO.findAll();
+		
+		
+			
+		return surveyResponseDAO.findAll().stream()
+				.filter(resp -> resp.getSurveyId() == surveyId)
+				.collect(Collectors.toList());
 		
 	}
 	
 	
 	
-	@Transactional(noRollbackFor = Exception.class)
+	@Transactional(noRollbackFor = Exception.class) // ok
 	@GetMapping("surveys/{id}/my-response")
 	public SurveyResponseDTO getSurveyUserSingleResponse(
-				
 				@RequestParam(name="connected-user") long userId,
 				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException
 	{
 		PersonneDTO employee = userIdToEmployee(userId);
+		
+		
+		if(!isEmployeeAuthorized(surveyDAO.findById(surveyId),employee))
+		{
+			// return an error	
+		}
+		
+		
 		Optional<SurveyResponseDTO> surveyResponse = surveyResponseDAO.findAll().stream()
 		.filter(resp -> resp.getOwner().getId() == employee.getId())
 		.filter(resp -> resp.getSurveyId() == surveyId)
 		.findFirst();
 		
 		
-		return  surveyResponse.get();
+		SurveyResponseDTO empty = new SurveyResponseDTO();
+		
+		empty.setOwner(employee);
+		empty.setSurveyId(surveyId);
+		
+		
+		return  surveyResponse.orElse(empty);
 		
 	}
 	
@@ -205,6 +275,13 @@ public class EnqueteController {
 	
 	
 	
+
+
+	private boolean isEmployeeAuthorized(SurveyDTO s, PersonneDTO employee) {
+		
+		return true;
+	}
+
 	
 	private PersonneDTO userIdToEmployee(long id) {
 		
@@ -216,7 +293,7 @@ public class EnqueteController {
 		
 	}
 	
-	
+
 	
 
 
