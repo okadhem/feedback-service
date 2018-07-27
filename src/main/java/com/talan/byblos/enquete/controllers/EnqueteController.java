@@ -1,6 +1,7 @@
 package com.talan.byblos.enquete.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,6 +31,7 @@ import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dao.ResponseDAO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
 import com.talan.byblos.enquete.dto.SurveyResponseDTO;
+import com.talan.byblos.enquete.entites.SurveyResponseEntity;
 import com.talan.byblos.feedback.utility.mapping.PersonneUtility;
 import com.talan.byblos.enquete.dto.QuestionDTO;
 import com.talan.byblos.enquete.dto.ResponseDTO;
@@ -161,6 +163,48 @@ public class EnqueteController {
 		return surveyResponseDAO.merge(response);
 		
 	}
+	
+	
+	@Transactional(noRollbackFor = Exception.class)
+	@GetMapping("surveys/{id}/responses")
+	public List<SurveyResponseDTO> getSurveyResponse(
+				
+				@RequestParam(name="connected-user") long userId,
+				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException
+	{
+		PersonneDTO employee = userIdToEmployee(userId);
+		
+		
+		return surveyResponseDAO.findAll();
+		
+	}
+	
+	
+	
+	@Transactional(noRollbackFor = Exception.class)
+	@GetMapping("surveys/{id}/my-response")
+	public SurveyResponseDTO getSurveyUserSingleResponse(
+				
+				@RequestParam(name="connected-user") long userId,
+				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException
+	{
+		PersonneDTO employee = userIdToEmployee(userId);
+		Optional<SurveyResponseDTO> surveyResponse = surveyResponseDAO.findAll().stream()
+		.filter(resp -> resp.getOwner().getId() == employee.getId())
+		.filter(resp -> resp.getSurveyId() == surveyId)
+		.findFirst();
+		
+		
+		return  surveyResponse.get();
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	private PersonneDTO userIdToEmployee(long id) {
 		

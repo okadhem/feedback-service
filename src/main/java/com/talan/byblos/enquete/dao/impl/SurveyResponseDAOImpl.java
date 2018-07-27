@@ -1,5 +1,6 @@
 package com.talan.byblos.enquete.dao.impl;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -60,6 +61,15 @@ public class SurveyResponseDAOImpl extends GenericDAOImpl<SurveyResponseDTO, Sur
 				em.createQuery("select r from SurveyResponseEntity r where r.id=" + id, SurveyResponseEntity.class);
 		
 		return getDTOFromEntity(query.getSingleResult());
+		
+	}
+	
+	@Override
+	public List<SurveyResponseDTO> findAll() {
+		TypedQuery<SurveyResponseEntity> query = 
+				em.createQuery("select r from SurveyResponseEntity r", SurveyResponseEntity.class);
+		
+		return query.getResultList().stream().map(this::getDTOFromEntity).collect(Collectors.toList());
 		
 	}
 
