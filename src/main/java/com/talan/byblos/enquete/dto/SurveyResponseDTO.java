@@ -2,6 +2,8 @@ package com.talan.byblos.enquete.dto;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.talan.byblos.common.dto.AbstractDTO;
 import com.talan.byblos.common.dto.PersonneDTO;
 
@@ -11,7 +13,7 @@ public class SurveyResponseDTO extends AbstractDTO{
 	
 	protected PersonneDTO owner;
 	
-	
+	@NotNull
 	protected List<ResponseDTO> responses;
 	
 	

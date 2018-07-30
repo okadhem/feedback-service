@@ -1,5 +1,7 @@
 package com.talan.byblos.enquete.dto;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -21,7 +23,10 @@ import com.talan.byblos.enquete.entites.ResponseEntity;
 
 public class ResponseDTO extends AbstractDTO {
 	
+	@NotNull
 	protected long questionId;
+	
+	
 	protected long id;
 	
 	

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -123,7 +123,7 @@ public class EnqueteController {
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
 	@PostMapping("surveys") 
 	public SurveyDTO enquetes(
-			@RequestBody SurveyDTO enquete,
+			@Valid @RequestBody SurveyDTO enquete,
 			@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException
 	{
 		
@@ -141,7 +141,7 @@ public class EnqueteController {
 	@Transactional(noRollbackFor = Exception.class) 
 	@PostMapping("surveys/{id}/responses")
 	public SurveyResponseDTO postSurveyResponse(
-				@RequestBody SurveyResponseDTO response,
+				@Valid @RequestBody SurveyResponseDTO response,
 				@RequestParam(name="connected-user") long userId,
 				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, SurveyExeption
 	{

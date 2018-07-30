@@ -2,11 +2,15 @@ package com.talan.byblos.enquete.dto;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.talan.byblos.enquete.entites.QuestionEntity;
 import com.talan.byblos.enquete.entites.RMultValuesEntity;
 
 
 public class ResponseMultValuesDTO extends ResponseDTO{
+	
+	@NotNull
 	List<String> values;
 
 	@Override

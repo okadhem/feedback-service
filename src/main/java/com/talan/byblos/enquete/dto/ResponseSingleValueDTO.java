@@ -1,5 +1,7 @@
 package com.talan.byblos.enquete.dto;
 
+import javax.validation.constraints.NotNull;
+
 import com.talan.byblos.enquete.entites.QuestionEntity;
 import com.talan.byblos.enquete.entites.RMultValuesEntity;
 import com.talan.byblos.enquete.entites.RSingleValueEntity;
@@ -7,6 +9,7 @@ import com.talan.byblos.enquete.entites.ResponseEntity;
 
 public class ResponseSingleValueDTO extends ResponseDTO{
 	
+	@NotNull
 	String value;
 	
 	@Override

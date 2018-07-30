@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.talan.byblos.common.dto.AbstractDTO;
 import com.talan.byblos.common.dto.PersonneDTO;
 
@@ -17,17 +19,19 @@ public class SurveyDTO extends AbstractDTO {
 
 	private long id; 
 	
+	@NotNull
 	private String title;
 	
+	@NotNull
 	private Date expirationDate;
 	
-	private String description;
+	private String description = "";
 	
 	private List<PersonneDTO> visibility;
 	
 	private PersonneDTO owner;
 	
-	
+	@NotNull
 	private List<QuestionDTO> questions = new ArrayList<>();
 	
 	
