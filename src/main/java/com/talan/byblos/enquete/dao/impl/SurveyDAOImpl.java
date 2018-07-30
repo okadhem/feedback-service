@@ -61,6 +61,10 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		e.setOwner(PersonneUtility.convertDtoToEntity(dto.getOwner(), null));
 		
 		
+		//only when there exist a visibility list
+		if(dto.getVisibility() != null)
+		{	
+		
 		List<EmployeeEntity> visibility = dto.getVisibility().stream().map(personDTO -> {
 			EmployeeEntity employeeEntity = new EmployeeEntity();
 			 employeeEntity.setId(personDTO.getId());
@@ -70,9 +74,13 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		}).collect(Collectors.toList());
 		
 		e.setVisibility(visibility);
+		
+		}
+		
 		return e;
 	
 	
+		
 	}
 
 	
@@ -91,6 +99,9 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		dto.setDescription(entity.getDescription());
 		dto.setOwner(PersonneUtility.convertEntityToDto(entity.getOwner()));
 		
+		if(dto.getVisibility() != null)
+		{	
+		
 		List<PersonneDTO> visibility = entity.getVisibility().stream().map(personEntity -> {
 			PersonneDTO personDTO = new PersonneDTO();
 			personDTO.setId(personEntity.getId());
@@ -100,7 +111,7 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		}).collect(Collectors.toList());
 		
 		dto.setVisibility(visibility);
-				
+		}
 		
 		return dto;
 		

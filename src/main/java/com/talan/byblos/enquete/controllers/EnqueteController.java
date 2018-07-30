@@ -252,11 +252,22 @@ public class EnqueteController {
 	
 	
 	
-
+	// this function checks if an Employee is authorized to access (see or answer) the survey
 
 	private boolean isEmployeeAuthorized(SurveyDTO s, PersonneDTO employee) {
 		
-		return true;
+		
+		if(s.getOwner().getId() == employee.getId())
+			return true;
+		
+		// null visibility field represents a survey visible to everyone
+		if(s.getVisibility() == null)
+			return true;
+		
+		if(s.getVisibility().stream().map(PersonneDTO::getId).anyMatch(id -> id == employee.getId()))
+			return true;
+		
+		return false;
 	}
 
 	
