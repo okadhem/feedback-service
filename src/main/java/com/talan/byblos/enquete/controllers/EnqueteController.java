@@ -11,9 +11,11 @@ import javax.persistence.TypedQuery;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
 import com.talan.byblos.common.dto.PersonneDTO;
 import com.talan.byblos.common.entities.EmployeeEntity;
@@ -33,6 +36,8 @@ import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dao.ResponseDAO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
 import com.talan.byblos.enquete.dto.SurveyResponseDTO;
+import com.talan.byblos.enquete.entites.ResponseEntity;
+import com.talan.byblos.enquete.exceptions.SurveyExeption;
 import com.talan.byblos.feedback.utility.mapping.PersonneUtility;
 
 
@@ -68,15 +73,18 @@ public class EnqueteController {
 	@GetMapping("surveys/{id}")
 	public SurveyDTO enqueteById(
 			@PathVariable("id") long id,
-			@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException, ByblosSecurityException{
+			@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException, ByblosSecurityException, SurveyExeption{
 		
 		SurveyDTO survey = surveyDAO.findById(id);
+		
 		
 		PersonneDTO employee = userIdToEmployee(userId);
 		
 		
 		if(!isEmployeeAuthorized(survey,employee))
 		{
+			throw new SurveyExeption(String.format("you are trying to access a survey that you do not have access to (survey id is %d)."
+					, survey.getId()));
 			// return an error	
 		}
 		
@@ -133,7 +141,7 @@ public class EnqueteController {
 	public SurveyResponseDTO postSurveyResponse(
 				@RequestBody SurveyResponseDTO response,
 				@RequestParam(name="connected-user") long userId,
-				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException
+				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, SurveyExeption
 	{
 		SurveyDTO survey = surveyDAO.findById(surveyId);
 		PersonneDTO employee = userIdToEmployee(userId);
@@ -141,13 +149,17 @@ public class EnqueteController {
 		
 		
 		if(survey.getExpirationDate().before(new Date())) {
-			// error the survey expired
+			
+			throw new SurveyExeption("error : survey " + surveyId +  " expired ! ");
 		}
 		
 		
 		if(!isEmployeeAuthorized(survey, employee))
 		{
 			// error you can't access this survey
+			throw new SurveyExeption(String.format("you are trying to post a survey response to a survey that you do not have access to (survey id is %d)"
+					, survey.getId()));
+			
 			
 		}
 		
@@ -172,7 +184,7 @@ public class EnqueteController {
 	@GetMapping("surveys/{id}/responses") 
 	public List<SurveyResponseDTO> getSurveyResponses( 
 				@RequestParam(name="connected-user") long userId,
-				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException
+				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException, SurveyExeption
 	{
 		PersonneDTO employee = userIdToEmployee(userId);
 		
@@ -180,6 +192,9 @@ public class EnqueteController {
 		if(employee.getId() != survey.getOwner().getId())
 		{
 			// error you are not the owner of this survey
+			throw new SurveyExeption(String.format("you are trying to access a survey responses (survey id is %d) that you do not own"
+					, survey.getId()));
+			
 		}
 		
 		
@@ -202,14 +217,16 @@ public class EnqueteController {
 	@GetMapping("surveys/{id}/my-response")
 	public SurveyResponseDTO getSurveyUserSingleResponse(
 				@RequestParam(name="connected-user") long userId,
-				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException
+				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException, SurveyExeption
 	{
 		PersonneDTO employee = userIdToEmployee(userId);
+		SurveyDTO survey = surveyDAO.findById(surveyId);
 		
-		
-		if(!isEmployeeAuthorized(surveyDAO.findById(surveyId),employee))
+		if(!isEmployeeAuthorized(survey,employee))
 		{
-			// return an error	
+			throw new SurveyExeption(String.format("you are trying to get a survey response to a survey that you do not have access to (survey id is %d)"
+					, survey.getId()));
+			
 		}
 		
 		
@@ -252,6 +269,18 @@ public class EnqueteController {
 		
 		
 	}
+	
+	
+	 @ExceptionHandler(SurveyExeption.class)
+	 public org.springframework.http.ResponseEntity<Object> handleExeption(SurveyExeption ex, WebRequest request)
+	 {
+		 
+	        
+		 return new org.springframework.http.ResponseEntity<Object>(ex.getMessage(), HttpStatus.CONFLICT);
+		 
+		 
+		 
+	 }
 	
 
 	

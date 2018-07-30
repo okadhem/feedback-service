@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -108,11 +109,18 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 
 	
 	
-	public SurveyDTO findById(long id) {
+	public SurveyDTO findById(long id) throws ByblosDataAccessException {
+		try {
 		TypedQuery<SurveyEntity> query = 
 				em.createQuery("select s from SurveyEntity s where s.id=" + id, SurveyEntity.class);
+		SurveyDTO result = getDTOFromEntity(query.getSingleResult()); 
+		return result;
 		
-		return getDTOFromEntity(query.getSingleResult());
+		}
+		catch(NoResultException exception) {
+			throw new ByblosDataAccessException("Survey " + id + " cannot be found");
+			
+		}
 		
-	}
+	}	
 }
