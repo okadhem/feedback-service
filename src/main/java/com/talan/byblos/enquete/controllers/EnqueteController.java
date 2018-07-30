@@ -34,6 +34,8 @@ import com.talan.byblos.enquete.dao.SurveyResponseDAO;
 import com.talan.byblos.enquete.dao.QTextDAO;
 import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dao.ResponseDAO;
+import com.talan.byblos.enquete.dto.QuestionDTO;
+import com.talan.byblos.enquete.dto.ResponseDTO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
 import com.talan.byblos.enquete.dto.SurveyResponseDTO;
 import com.talan.byblos.enquete.entites.ResponseEntity;
@@ -163,6 +165,32 @@ public class EnqueteController {
 			
 		}
 		
+		List<Long> questions = survey.getQuestions().stream().map(QuestionDTO::getId).collect(Collectors.toList());
+		
+		List<Long> requiredQuestions = survey.getQuestions().stream()
+				.filter(QuestionDTO::isRequired)
+				.map(QuestionDTO::getId)
+				.collect(Collectors.toList());
+		
+		List<Long> answeredQuestions = response.getResponses().stream().map(ResponseDTO::getQuestionId).collect(Collectors.toList());
+
+		
+		if(!questions.containsAll(answeredQuestions)) {
+			
+			// a response does not belong to a question of this survey
+			
+			throw new SurveyExeption("a response does not relate to any question of this survey ! ");
+		}
+		
+		if(!answeredQuestions.containsAll(requiredQuestions))
+		{
+			// a required question was not answered
+			
+			throw new SurveyExeption("a required question was not answered ! ");
+			
+			
+		}
+			
 		
 		
 		
