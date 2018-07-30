@@ -32,7 +32,7 @@ public class SurveyResponseDAOImpl extends GenericDAOImpl<SurveyResponseDTO, Sur
 	@Override
 	public SurveyResponseEntity getEntityFromDTO(SurveyResponseDTO dto) {
 		SurveyResponseEntity entity = new SurveyResponseEntity();
-		entity.setId(dto.getId());
+		
 		entity.setResponses(dto.getResponses().stream().map(ResponseDTO::toEntity).collect(Collectors.toList()));
 		SurveyEntity survey = new SurveyEntity();
 		survey.setId(dto.getSurveyId());
@@ -46,7 +46,7 @@ public class SurveyResponseDAOImpl extends GenericDAOImpl<SurveyResponseDTO, Sur
 	@Override
 	public SurveyResponseDTO getDTOFromEntity(SurveyResponseEntity entity) {
 		SurveyResponseDTO dto = new SurveyResponseDTO();
-		dto.setId(entity.getId());
+		
 		dto.setResponses(entity.getResponses().stream().map(ResponseEntity::toDTO).collect(Collectors.toList()));
 		dto.setSurveyId(entity.getSurvey().getId());
 			

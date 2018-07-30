@@ -3,6 +3,7 @@ package com.talan.byblos.enquete.entites;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,40 +16,30 @@ import com.talan.byblos.common.entities.SubAbstractEntity;
 @Entity
 public class SurveyResponseEntity extends SubAbstractEntity {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	protected Long id;
+	@EmbeddedId
+	SurveyResponseId id = new SurveyResponseId();
 	
 	
-	@ManyToOne
-	protected EmployeeEntity owner;
+
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	protected List<ResponseEntity> responses;
 	
-	@ManyToOne
-	protected SurveyEntity survey;
-
+	
 	
 	
 	
 	// getters and setters
 	
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	
 
 	public EmployeeEntity getOwner() {
-		return owner;
+		return id.getOwner();
 	}
 
 	public void setOwner(EmployeeEntity owner) {
-		this.owner = owner;
+		this.id.setOwner(owner);
 	}
 
 	public List<ResponseEntity> getResponses() {
@@ -60,11 +51,11 @@ public class SurveyResponseEntity extends SubAbstractEntity {
 	}
 
 	public SurveyEntity getSurvey() {
-		return survey;
+		return id.getSurvey();
 	}
 
 	public void setSurvey(SurveyEntity survey) {
-		this.survey = survey;
+		this.id.setSurvey(survey);
 	}
 	
 	

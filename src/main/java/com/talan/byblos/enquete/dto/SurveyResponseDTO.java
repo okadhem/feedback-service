@@ -7,7 +7,7 @@ import com.talan.byblos.common.dto.PersonneDTO;
 
 public class SurveyResponseDTO extends AbstractDTO{
 	
-	protected Long id;
+	
 	
 	protected PersonneDTO owner;
 	
@@ -21,14 +21,7 @@ public class SurveyResponseDTO extends AbstractDTO{
 	// getters and setters
 
 
-	public Long getId() {
-		return id;
-	}
 
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 
 	public PersonneDTO getOwner() {
