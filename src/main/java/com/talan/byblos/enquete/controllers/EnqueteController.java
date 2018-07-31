@@ -1,5 +1,7 @@
 package com.talan.byblos.enquete.controllers;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+
 
 import com.talan.byblos.common.dto.PersonneDTO;
 import com.talan.byblos.common.entities.EmployeeEntity;
@@ -66,6 +69,8 @@ public class EnqueteController {
 
 	@Autowired
 	SurveyResponseDAO surveyResponseDAO;
+	
+
 	
 	
 	
@@ -235,6 +240,7 @@ public class EnqueteController {
 	}
 	
 	
+	
 
 	
 	
@@ -273,6 +279,19 @@ public class EnqueteController {
 		return  surveyResponse.orElse(empty);
 		
 	}
+	
+	@Transactional(noRollbackFor = Exception.class)
+	@GetMapping("employees") 
+	public List<PersonneDTO> getEmployeeList() throws ByblosDataAccessException, ByblosSecurityException
+	{
+		return entityManager.createQuery("select e from EmployeeEntity e",EmployeeEntity.class)
+				.getResultList().stream().map(PersonneUtility::convertEntityToDto)
+				.collect(Collectors.toList());
+		 
+	
+	}
+	
+	
 	
 	
 	
