@@ -23,7 +23,8 @@ import com.talan.byblos.enquete.utils.ResultAggregator;
 @JsonSubTypes({
     @JsonSubTypes.Type(value = QMultChoicesDTO.class, name = "QMultChoices"),
 
-    @JsonSubTypes.Type(value = QTextDTO.class, name = "QTextEntity") }
+    @JsonSubTypes.Type(value = QTextDTO.class, name = "QTextEntity"),
+    @JsonSubTypes.Type(value = QMultChoicesMultAnswersDTO.class, name = "QMultChoicesMultAnswers")}
 )
 
 
