@@ -27,6 +27,7 @@ public class SurveyDTO extends AbstractDTO {
 	
 	private String description = "";
 	
+	@NotNull
 	private List<PersonneDTO> visibility;
 	
 	private PersonneDTO owner;

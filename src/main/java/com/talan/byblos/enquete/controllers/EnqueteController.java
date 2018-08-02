@@ -135,7 +135,7 @@ public class EnqueteController {
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
 	@PostMapping("surveys") 
 	public SurveyDTO enquetes(
-			@RequestBody SurveyDTO enquete,
+			@Valid @RequestBody SurveyDTO enquete,
 			@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException
 	{
 		
@@ -333,8 +333,8 @@ public class EnqueteController {
 		if(s.getOwner().getId() == employee.getId())
 			return true;
 		
-		// null visibility field represents a survey visible to everyone
-		if(s.getVisibility() == null)
+		// an empty visibility field represents a survey visible to everyone
+		if(s.getVisibility().isEmpty())
 			return true;
 		
 		if(s.getVisibility().stream().map(PersonneDTO::getId).anyMatch(id -> id == employee.getId()))
