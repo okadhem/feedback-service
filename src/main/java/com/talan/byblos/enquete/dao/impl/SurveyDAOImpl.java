@@ -99,7 +99,7 @@ public class SurveyDAOImpl extends GenericDAOImpl<SurveyDTO, SurveyEntity> imple
 		dto.setDescription(entity.getDescription());
 		dto.setOwner(PersonneUtility.convertEntityToDto(entity.getOwner()));
 		
-		if(dto.getVisibility() != null)
+		if(entity.getVisibility() != null)
 		{	
 		
 		List<PersonneDTO> visibility = entity.getVisibility().stream().map(personEntity -> {
