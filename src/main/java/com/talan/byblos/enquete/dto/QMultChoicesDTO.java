@@ -2,7 +2,10 @@ package com.talan.byblos.enquete.dto;
 
 import java.util.List;
 
+import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.entites.QMultChoicesEntity;
+import com.talan.byblos.enquete.utils.NbrOccurenceAggreagator;
+import com.talan.byblos.enquete.utils.ResultAggregator;
 
 
 public class QMultChoicesDTO extends QuestionDTO {
@@ -14,7 +17,35 @@ public class QMultChoicesDTO extends QuestionDTO {
 	
 	
 	List<String> choices;
+	
+	
+	public ResultReportDTO reportResults(QuestionDAO qDAO) {
+		
+		
+		ResultAggregator aggregator = new NbrOccurenceAggreagator(choices);
+		
+		
+		List<ResponseDTO> responses = qDAO.findAllAnswersByQuestionId(id);
+		
+		
+		responses.forEach(resp -> {
+			if(resp instanceof ResponseSingleValueDTO) {
+				aggregator.accumulate((ResponseSingleValueDTO)resp);	
+			}
+			if(resp instanceof ResponseMultValuesDTO)
+			{
+				aggregator.accumulate((ResponseMultValuesDTO)resp);	
+			}
+				
+		});
+		
+		
+		return aggregator.getDTO();
 
+		
+	}
+		
+	
 	
 	
 	@Override
@@ -27,6 +58,9 @@ public class QMultChoicesDTO extends QuestionDTO {
 	
 	return entity;
 	}
+	
+
+	
 	
 	public List<String> getChoices() {
 		return choices;

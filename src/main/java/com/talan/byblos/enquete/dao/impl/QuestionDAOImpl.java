@@ -11,7 +11,12 @@ import com.talan.byblos.common.utility.exception.ByblosDataAccessException;
 import com.talan.byblos.common.utility.exception.ByblosSecurityException;
 import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dto.QuestionDTO;
+import com.talan.byblos.enquete.dto.ResponseDTO;
+import com.talan.byblos.enquete.dto.ResponseMultValuesDTO;
 import com.talan.byblos.enquete.entites.QuestionEntity;
+import com.talan.byblos.enquete.entites.RMultValuesEntity;
+import com.talan.byblos.enquete.entites.RSingleValueEntity;
+import com.talan.byblos.enquete.entites.ResponseEntity;
 
 
 
@@ -41,6 +46,16 @@ public class QuestionDAOImpl extends GenericDAOImpl<QuestionDTO, QuestionEntity>
 	public QuestionDTO getDTOFromEntity(QuestionEntity entity) {
 		return entity.toDTO();
 	}
+	
+	@Override
+	public List<ResponseDTO> findAllAnswersByQuestionId(long id) {
+		
+		List<ResponseDTO> res = getEntityManager().createQuery("select r from ResponseEntity r where r.question.id=" + id, ResponseEntity.class)
+		.getResultList().stream().map(r -> r.toDTO())
+		.collect(Collectors.toList());
+		return res;
+	}
+
 
 	
 }

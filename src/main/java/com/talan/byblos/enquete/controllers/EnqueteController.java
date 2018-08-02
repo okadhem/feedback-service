@@ -34,11 +34,14 @@ import com.talan.byblos.common.utility.exception.ByblosDataAccessException;
 import com.talan.byblos.common.utility.exception.ByblosSecurityException;
 import com.talan.byblos.enquete.dao.SurveyDAO;
 import com.talan.byblos.enquete.dao.SurveyResponseDAO;
+import com.talan.byblos.enquete.dao.QMultChoicesDAO;
 import com.talan.byblos.enquete.dao.QTextDAO;
 import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dao.ResponseDAO;
 import com.talan.byblos.enquete.dto.QuestionDTO;
 import com.talan.byblos.enquete.dto.ResponseDTO;
+import com.talan.byblos.enquete.dto.ResponseMultValuesDTO;
+import com.talan.byblos.enquete.dto.ResultReportDTO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
 import com.talan.byblos.enquete.dto.SurveyResponseDTO;
 import com.talan.byblos.enquete.entites.ResponseEntity;
@@ -71,6 +74,10 @@ public class EnqueteController {
 	SurveyResponseDAO surveyResponseDAO;
 	
 
+	
+	
+	@Autowired
+	QuestionDAO qDAO;
 	
 	
 	
@@ -128,7 +135,7 @@ public class EnqueteController {
 	@Transactional(propagation= Propagation.REQUIRED, readOnly= false, noRollbackFor = Exception.class)
 	@PostMapping("surveys") 
 	public SurveyDTO enquetes(
-			@Valid @RequestBody SurveyDTO enquete,
+			@RequestBody SurveyDTO enquete,
 			@RequestParam(name="connected-user") long userId) throws ByblosDataAccessException
 	{
 		
@@ -196,6 +203,7 @@ public class EnqueteController {
 			
 		}
 			
+		
 		
 		
 		
@@ -292,6 +300,24 @@ public class EnqueteController {
 	}
 	
 	
+	
+	
+
+	@Transactional(noRollbackFor = Exception.class) 
+	@GetMapping("surveys/{id}/report")
+	public List<ResultReportDTO> getSurveyReport(
+				@RequestParam(name="connected-user") long userId,
+				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException, SurveyExeption
+	{
+		SurveyDTO survey = surveyDAO.findById(surveyId);
+			
+		
+		
+		return survey.getQuestions().stream().map(q -> q.reportResults(qDAO)).collect(Collectors.toList());
+		
+
+		
+	}
 	
 	
 	
