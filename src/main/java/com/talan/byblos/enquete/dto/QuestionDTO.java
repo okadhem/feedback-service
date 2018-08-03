@@ -27,7 +27,8 @@ import com.talan.byblos.enquete.utils.ResultAggregator;
 
     @JsonSubTypes.Type(value = QTextDTO.class, name = "QTextEntity"),
     @JsonSubTypes.Type(value = QMultChoicesMultAnswersDTO.class, name = "QMultChoicesMultAnswers"),
-    @JsonSubTypes.Type(value = QNumberDTO.class, name = "QNumberEntity")}
+    @JsonSubTypes.Type(value = QNumberDTO.class, name = "QNumberEntity"),
+    @JsonSubTypes.Type(value = QDateTimeDTO.class, name = "QDateTime")}
 )
 
 
