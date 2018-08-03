@@ -7,7 +7,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property="type", include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = NbrOccurenceResultDTO.class, name = "NbrOccurenceResult")}
+    @JsonSubTypes.Type(value = NbrOccurenceResultDTO.class, name = "NbrOccurenceResult"),
+    @JsonSubTypes.Type(value = NumberReportDTO.class, name = "NumberResult")
+}
 )
 public class ResultReportDTO {
 

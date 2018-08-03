@@ -14,7 +14,9 @@ import com.talan.byblos.common.dto.AbstractDTO;
 import com.talan.byblos.enquete.dao.QMultChoicesDAO;
 import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dao.impl.QMultChoicesDAOImpl;
+import com.talan.byblos.enquete.entites.QNumberEntity;
 import com.talan.byblos.enquete.entites.QuestionEntity;
+import com.talan.byblos.enquete.exceptions.SurveyExeption;
 import com.talan.byblos.enquete.utils.NbrOccurenceAggreagator;
 import com.talan.byblos.enquete.utils.ResultAggregator;
 
@@ -24,7 +26,8 @@ import com.talan.byblos.enquete.utils.ResultAggregator;
     @JsonSubTypes.Type(value = QMultChoicesDTO.class, name = "QMultChoices"),
 
     @JsonSubTypes.Type(value = QTextDTO.class, name = "QTextEntity"),
-    @JsonSubTypes.Type(value = QMultChoicesMultAnswersDTO.class, name = "QMultChoicesMultAnswers")}
+    @JsonSubTypes.Type(value = QMultChoicesMultAnswersDTO.class, name = "QMultChoicesMultAnswers"),
+    @JsonSubTypes.Type(value = QNumberDTO.class, name = "QNumberEntity")}
 )
 
 
@@ -52,7 +55,7 @@ public class QuestionDTO extends AbstractDTO{
 	}
 	
 	
-	public ResultReportDTO reportResults(QuestionDAO qDAO) {
+	public ResultReportDTO reportResults(QuestionDAO qDAO) throws SurveyExeption {
 		return null;
 	}
 	
