@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.entites.QMultChoicesEntity;
+import com.talan.byblos.enquete.exceptions.SurveyExeption;
 import com.talan.byblos.enquete.utils.NbrOccurenceAggreagator;
 import com.talan.byblos.enquete.utils.ResultAggregator;
 
@@ -19,7 +20,7 @@ public class QMultChoicesDTO extends QuestionDTO {
 	List<String> choices;
 	
 	
-	public ResultReportDTO reportResults(QuestionDAO qDAO) {
+	public ResultReportDTO reportResults(QuestionDAO qDAO) throws SurveyExeption {
 		
 		
 		ResultAggregator aggregator = new NbrOccurenceAggreagator(choices);
