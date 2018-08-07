@@ -4,19 +4,13 @@ import java.util.List;
 
 import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.entites.QMultChoicesEntity;
+import com.talan.byblos.enquete.entites.QMultChoicesMultAnswersEntity;
 import com.talan.byblos.enquete.exceptions.SurveyExeption;
 import com.talan.byblos.enquete.utils.NbrOccurenceAggreagator;
 import com.talan.byblos.enquete.utils.ResultAggregator;
 
+public class QMultChoicesMultAnswersDTO extends QuestionDTO {
 
-public class QMultChoicesDTO extends QuestionDTO {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
-	
 	List<String> choices;
 	
 	
@@ -50,8 +44,8 @@ public class QMultChoicesDTO extends QuestionDTO {
 	
 	
 	@Override
-	public QMultChoicesEntity toEntity() {
-		QMultChoicesEntity entity = new QMultChoicesEntity();
+	public QMultChoicesMultAnswersEntity toEntity() {
+		QMultChoicesMultAnswersEntity entity = new QMultChoicesMultAnswersEntity();
 		entity.setRequired(required);
 		entity.setId(id);
 		entity.setLabel(label);
@@ -73,5 +67,6 @@ public class QMultChoicesDTO extends QuestionDTO {
 	
 	
 	
+
 
 }

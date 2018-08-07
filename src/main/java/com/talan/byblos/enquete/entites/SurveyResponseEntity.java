@@ -57,6 +57,14 @@ public class SurveyResponseEntity extends SubAbstractEntity {
 	public void setSurvey(SurveyEntity survey) {
 		this.id.setSurvey(survey);
 	}
+
+	public SurveyResponseId getId() {
+		return id;
+	}
+
+	public void setId(SurveyResponseId id) {
+		this.id = id;
+	}
 	
 	
 	

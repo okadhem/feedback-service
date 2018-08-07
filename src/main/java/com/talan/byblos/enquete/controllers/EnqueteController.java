@@ -313,7 +313,15 @@ public class EnqueteController {
 			
 		
 		
-		return survey.getQuestions().stream().map(q -> q.reportResults(qDAO)).collect(Collectors.toList());
+		return survey.getQuestions().stream().map(q -> {
+			try {
+				return q.reportResults(qDAO);
+			} catch (SurveyExeption e) {
+				
+				e.printStackTrace();
+			}
+			return null;
+		}).collect(Collectors.toList());
 		
 
 		
