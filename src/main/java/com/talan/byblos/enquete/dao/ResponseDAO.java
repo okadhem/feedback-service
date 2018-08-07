@@ -8,4 +8,5 @@ import com.talan.byblos.enquete.entites.ResponseEntity;
 
 public interface ResponseDAO extends GenericDAO<ResponseDTO, ResponseEntity> {
 
+
 }

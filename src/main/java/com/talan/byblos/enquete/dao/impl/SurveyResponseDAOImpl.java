@@ -4,13 +4,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.talan.byblos.common.dao.impl.generic.GenericDAOImpl;
 import com.talan.byblos.common.dto.PersonneDTO;
+import com.talan.byblos.common.utility.exception.ByblosDataAccessException;
+import com.talan.byblos.enquete.dao.ResponseDAO;
 import com.talan.byblos.enquete.dao.SurveyResponseDAO;
 import com.talan.byblos.enquete.dto.ResponseDTO;
 import com.talan.byblos.enquete.dto.SurveyResponseDTO;
@@ -27,6 +31,9 @@ public class SurveyResponseDAOImpl extends GenericDAOImpl<SurveyResponseDTO, Sur
 
 	@PersistenceContext
 	EntityManager em;
+	
+	@Autowired
+	ResponseDAO responseDAO;
 	
 	
 	@Override
@@ -56,9 +63,10 @@ public class SurveyResponseDAOImpl extends GenericDAOImpl<SurveyResponseDTO, Sur
 	}
 	
 	@Override
-	public SurveyResponseDTO findById(long id) {
+	public SurveyResponseDTO findById(long surveyId, long employeeId) {
 		TypedQuery<SurveyResponseEntity> query = 
-				em.createQuery("select r from SurveyResponseEntity r where r.id=" + id, SurveyResponseEntity.class);
+				em.createQuery("select r from SurveyResponseEntity r where r.id.owner.id=" + employeeId
+						+ " and r.id.survey.id=" + surveyId, SurveyResponseEntity.class);
 		
 		return getDTOFromEntity(query.getSingleResult());
 		
@@ -71,6 +79,28 @@ public class SurveyResponseDAOImpl extends GenericDAOImpl<SurveyResponseDTO, Sur
 		
 		return query.getResultList().stream().map(this::getDTOFromEntity).collect(Collectors.toList());
 		
+	}
+	
+	@Override
+	public SurveyResponseDTO merge(SurveyResponseDTO sourceDTO) throws ByblosDataAccessException {
+		
+		try {
+		SurveyResponseDTO old = findById(sourceDTO.getSurveyId(), sourceDTO.getOwner().getId());
+		
+			for(ResponseDTO r : old.getResponses())
+			{
+				responseDAO.remove(r);
+			
+			}
+		
+		}
+		catch(NoResultException e)
+		{
+			// we remove nothing, sourceDTO doesn't previously exist 
+			
+		}
+		
+		return super.merge(sourceDTO);
 	}
 
 }
