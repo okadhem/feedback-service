@@ -329,6 +329,22 @@ public class EnqueteController {
 	
 	
 	
+	// checks if the connected user is authorized to view report / responses of a survey
+	@GetMapping("surveys/{id}/isAuthorized")
+	public boolean isConnectedUserTheOwner(
+				@RequestParam(name="connected-user") long userId,
+				@PathVariable(name="id") long surveyId) throws ByblosDataAccessException, ByblosSecurityException, SurveyExeption
+	{
+		PersonneDTO employee = userIdToEmployee(userId);
+		SurveyDTO survey = surveyDAO.findById(surveyId);
+		
+		return survey.getOwner().getId() == employee.getId();
+		
+	
+	}
+	
+	
+	
 	
 	
 	
