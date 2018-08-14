@@ -1,6 +1,7 @@
 package com.talan.byblos.enquete.utils;
 
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,11 +32,12 @@ public class TextAggreagator extends ResultAggregator {
 	public TextAggreagator() {
 		wordMap = new TreeMap<>();
 		ignoreList = new ArrayList<>();
+		URL urlAff = getClass().getResource("fr.aff");
+		URL urlDic = getClass().getResource("fr.dic");
 		
-		String hunspellDictionaryPath = "/home/kadhem/Downloads/en_US.dic";
+		String hunspellDictionaryPath = urlDic.getPath();
 		
-		String hunspellDictionaryTreePath = "/home/kadhem/Downloads/en_US.aff";
-		
+		String hunspellDictionaryTreePath = urlAff.getPath();
 		
 		hunspell = new Hunspell(hunspellDictionaryPath, hunspellDictionaryTreePath);
 		
