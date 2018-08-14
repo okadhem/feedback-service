@@ -2,6 +2,7 @@ package com.talan.byblos.enquete.controllers;
 
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -38,12 +39,18 @@ import com.talan.byblos.enquete.dao.QMultChoicesDAO;
 import com.talan.byblos.enquete.dao.QTextDAO;
 import com.talan.byblos.enquete.dao.QuestionDAO;
 import com.talan.byblos.enquete.dao.ResponseDAO;
+import com.talan.byblos.enquete.dto.QDateTimeDTO;
+import com.talan.byblos.enquete.dto.QMultChoicesDTO;
+import com.talan.byblos.enquete.dto.QNumberDTO;
+import com.talan.byblos.enquete.dto.QTextDTO;
 import com.talan.byblos.enquete.dto.QuestionDTO;
 import com.talan.byblos.enquete.dto.ResponseDTO;
 import com.talan.byblos.enquete.dto.ResponseMultValuesDTO;
+import com.talan.byblos.enquete.dto.ResponseSingleValueDTO;
 import com.talan.byblos.enquete.dto.ResultReportDTO;
 import com.talan.byblos.enquete.dto.SurveyDTO;
 import com.talan.byblos.enquete.dto.SurveyResponseDTO;
+import com.talan.byblos.enquete.entites.QTextEntity;
 import com.talan.byblos.enquete.entites.ResponseEntity;
 import com.talan.byblos.enquete.exceptions.SurveyExeption;
 import com.talan.byblos.feedback.utility.mapping.PersonneUtility;
@@ -243,6 +250,7 @@ public class EnqueteController {
 			
 		return surveyResponseDAO.findAll().stream()
 				.filter(resp -> resp.getSurveyId() == surveyId)
+				.map(sr -> populateUnAnwseredQuestions(sr, survey))
 				.collect(Collectors.toList());
 		
 	}
@@ -276,6 +284,13 @@ public class EnqueteController {
 		.filter(resp -> resp.getOwner().getId() == employee.getId())
 		.filter(resp -> resp.getSurveyId() == surveyId)
 		.findFirst();
+		
+		
+		
+	
+		surveyResponse.map(sr -> populateUnAnwseredQuestions(sr, survey));
+		
+		
 		
 		
 		SurveyResponseDTO empty = new SurveyResponseDTO();
@@ -344,6 +359,43 @@ public class EnqueteController {
 	}
 	
 	
+	
+	
+	
+	
+	// stupid thing
+			// we need to send responses to all questions (even those who are not initially answered)
+			// so that the UI doesn't get confused.
+	
+	public SurveyResponseDTO populateUnAnwseredQuestions(SurveyResponseDTO sr, SurveyDTO survey)
+	{
+	List<ResponseDTO> responses_ = new ArrayList<>();
+	survey.getQuestions().forEach(q -> {
+		Optional<ResponseDTO> conditateResp = sr.getResponses().stream().filter(r -> r.getQuestionId() == q.getId()).findFirst();
+		if(conditateResp.isPresent()) {
+			responses_.add(conditateResp.get());
+		}
+		else {
+			if(q instanceof QTextDTO || q instanceof QMultChoicesDTO || q instanceof QNumberDTO || q instanceof QDateTimeDTO)
+			{
+				ResponseSingleValueDTO r = new ResponseSingleValueDTO();
+				r.setQuestionId(q.getId());
+				r.setValue("");
+				responses_.add(r);
+			}
+			else {
+				ResponseMultValuesDTO r = new ResponseMultValuesDTO();
+				r.setQuestionId(q.getId());
+				r.setValues(new ArrayList<>());
+				responses_.add(r);
+				
+			}
+		}
+	});
+	sr.setResponses(responses_);
+	return sr;
+	
+	}
 	
 	
 	
