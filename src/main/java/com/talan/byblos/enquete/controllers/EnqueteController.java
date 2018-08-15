@@ -307,9 +307,10 @@ public class EnqueteController {
 	@GetMapping("employees") 
 	public List<PersonneDTO> getEmployeeList() throws ByblosDataAccessException, ByblosSecurityException
 	{
-		return entityManager.createQuery("select e from EmployeeEntity e",EmployeeEntity.class)
+		return entityManager.createQuery("select e from EmployeeEntity e where e.actif = true",EmployeeEntity.class)
 				.getResultList().stream().map(PersonneUtility::convertEntityToDto)
 				.collect(Collectors.toList());
+		//return new ArrayList<>();
 		 
 	
 	}
